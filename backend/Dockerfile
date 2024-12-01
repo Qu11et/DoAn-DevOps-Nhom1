@@ -11,4 +11,4 @@ COPY /build/libs/spring_api-0.0.1-SNAPSHOT.jar /app/spring_api-0.0.1-SNAPSHOT.ja
 EXPOSE 8080
 
 # Chạy ứng dụng
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/spring_api-0.0.1-SNAPSHOT.jar"]

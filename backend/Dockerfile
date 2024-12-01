@@ -13,8 +13,10 @@ RUN gradle build --info --no-daemon --stacktrace || return 0
 # Sao chép mã nguồn vào container
 COPY . . 
 
+RUN chmod -R 777 /home/gradle/.gradle
+
 # Build ứng dụng
-RUN gradle clean build -x test --info --no-daemon --stacktrace
+RUN gradle clean build -x test --info --debug --no-daemon --stacktrace
 
 # Sử dụng OpenJDK nhẹ để chạy ứng dụng
 FROM openjdk:17-jdk-slim

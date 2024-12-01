@@ -1,30 +1,39 @@
-version: "3.8"
+version: '3.9'
+
 services:
-  mongodb:
-    container_name: mongo
-    image: mongo:latest
+  database:
+    image: postgres:15
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: your_username
+      POSTGRES_PASSWORD: your_password
+      POSTGRES_DB: your_database
     volumes:
-      - ./backend/data:/data
+      - postgres-data:/var/lib/postgresql/data
     ports:
-      - "27017:27017"
+      - "5432:5432"
 
   backend:
-    container_name: backend
-    build: ./backend
-    env_file:
-      - ./backend/.env.sample
-    ports:
-      - "5000:5000"
+    build:
+      context: ./backend
+    container_name: backend-container
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/your_database
+      SPRING_DATASOURCE_USERNAME: your_username
+      SPRING_DATASOURCE_PASSWORD: your_password
     depends_on:
-      - mongodb
+      - database
+    ports:
+      - "8080:8080"
 
   frontend:
-    container_name: frontend
-    build: ./frontend
-    env_file:
-      - ./frontend/.env.sample
+    build:
+      context: ./frontend
+    container_name: frontend-container
+    depends_on:
+      - backend
     ports:
-      - "5173:5173"
-      
+      - "80:80"
+
 volumes:
-  data:
+  postgres-data:

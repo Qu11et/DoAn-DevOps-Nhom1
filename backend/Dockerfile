@@ -1,13 +1,32 @@
-FROM node:21
+# Sử dụng Gradle chính thức để build ứng dụng
+FROM gradle:8.3-jdk17 AS builder
 
+# Thiết lập thư mục làm việc
 WORKDIR /app
 
-COPY . .
+# Sao chép file build.gradle và settings.gradle (nếu có)
+COPY build.gradle settings.gradle ./
 
-RUN npm i
+# Tải dependencies để cache
+RUN gradle build --no-daemon --stacktrace || return 0
 
-COPY .env.sample .env
+# Sao chép mã nguồn vào container
+COPY . . 
 
-EXPOSE 5000
+# Build ứng dụng
+RUN gradle clean build -x test --no-daemon --stacktrace
 
-CMD ["npm", "start"]
+# Sử dụng OpenJDK nhẹ để chạy ứng dụng
+FROM openjdk:17-jdk-slim
+
+# Thiết lập thư mục làm việc
+WORKDIR /app
+
+# Sao chép file JAR từ stage trước
+COPY --from=builder /app/build/libs/*.jar app.jar
+
+# Expose cổng 8080 (mặc định cho Spring Boot)
+EXPOSE 8080
+
+# Chạy ứng dụng
+ENTRYPOINT ["java", "-jar", "app.jar"]

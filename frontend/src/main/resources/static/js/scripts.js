@@ -3,7 +3,7 @@ function FetchUser() {
     const username = document.getElementById("username").value;
 
     // Fetch user data based on the username
-    fetch(`http://192.168.188.15:8080/api/user/getByName?name=${username}`)
+    fetch(`http://localhost:8080/api/user/getByName?name=${username}`)
         .then(response => response.json()).catch(error => alert("No users matched that name!!"))
         .then(json => {
             console.log(json);

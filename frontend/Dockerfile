@@ -25,8 +25,8 @@ WORKDIR /app
 # Sao chép file JAR từ stage build trước
 COPY --from=builder /app/build/libs/*.jar app.jar
 
-# Expose cổng 8080 (hoặc cổng ứng dụng)
-EXPOSE 8080
+# Expose cổng 9090 (hoặc cổng ứng dụng)
+EXPOSE 9090
 
 # Chạy ứng dụng
 ENTRYPOINT ["java", "-jar", "app.jar"]

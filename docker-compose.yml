@@ -5,11 +5,12 @@ services:
     image: postgres:15
     container_name: postgres-db
     environment:
-      POSTGRES_USER: your_username
-      POSTGRES_PASSWORD: your_password
-      POSTGRES_DB: your_database
+      POSTGRES_USER: taikhau
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: nhom1-database
     volumes:
       - postgres-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
 
@@ -18,9 +19,9 @@ services:
       context: ./backend
     container_name: backend-container
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/your_database
-      SPRING_DATASOURCE_USERNAME: your_username
-      SPRING_DATASOURCE_PASSWORD: your_password
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/nhom1-database
+      SPRING_DATASOURCE_USERNAME: taikhau
+      SPRING_DATASOURCE_PASSWORD: 123
     depends_on:
       - database
     ports:
@@ -33,7 +34,7 @@ services:
     depends_on:
       - backend
     ports:
-      - "80:80"
+      - "9090:9090"
 
 volumes:
   postgres-data:

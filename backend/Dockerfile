@@ -8,13 +8,13 @@ WORKDIR /app
 COPY build.gradle settings.gradle ./
 
 # Tải dependencies để cache
-RUN gradle build --no-daemon --stacktrace || return 0
+RUN gradle build --info --no-daemon --stacktrace || return 0
 
 # Sao chép mã nguồn vào container
 COPY . . 
 
 # Build ứng dụng
-RUN gradle clean build -x test --no-daemon --stacktrace
+RUN gradle clean build -x test --info --no-daemon --stacktrace
 
 # Sử dụng OpenJDK nhẹ để chạy ứng dụng
 FROM openjdk:17-jdk-slim

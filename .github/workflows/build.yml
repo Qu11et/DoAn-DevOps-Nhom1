@@ -135,16 +135,8 @@ jobs:
           docker pull qu1et/nhom1-backend:latest
           docker pull qu1et/nhom1-frontend:latest
 
-      - name: Start Trivy Server
-        run: docker run -d -p 4954:4954 aquasec/trivy:latest server
-
-      - name: Scan Backend Image
-        run: |
-          trivy client --server http://localhost:4954 image qu1et/nhom1-backend:latest > trivy_backend_scan.txt
-
-      - name: Scan Frontend Image
-        run: |
-          trivy client --server http://localhost:4954 image qu1et/nhom1-frontend:latest > trivy_frontend_scan.txt
+      - name: Image backend scan
+        run: trivy image qu1et/nhom1-backend:latest > trivyimagedeploybackend.txt
 
       - name: Deploy with Docker Compose
         run: docker-compose up -d

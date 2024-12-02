@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - backend/**
 
 jobs:
   build:
@@ -78,31 +80,6 @@ jobs:
           SPRING_DATASOURCE_USERNAME: taikhau
           SPRING_DATASOURCE_PASSWORD: 123
 
-       # Frontend Build and Analysis
-      - name: Make gradlew executable for Frontend
-        run: chmod +x frontend/gradlew
-
-      # Build frontend
-      - name: Build Frontend
-        run: |
-          cd frontend
-          ./gradlew build
-
-      # Run tests for backend
-      - name: Run Frontend Tests
-        run: |
-          cd frontend
-          ./gradlew test
-
-      # Run SonarQube analysis
-      - name: SonarQube Analysis
-        run: |
-          cd frontend
-          ./gradlew sonar --info
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-
           # Build and push backend image
       - name: Build and Push Backend Image
         run: |
@@ -110,14 +87,6 @@ jobs:
           docker tag nhom1-backend qu1et/nhom1-backend:latest
           docker login -u ${{ secrets.Dockerhub_username }} -p ${{ secrets.Dockerhub_token }}
           docker push qu1et/nhom1-backend:latest
-      
-      # Build and push frontend image
-      - name: Build and Push Frontend Image
-        run: |
-          docker build -t nhom1-frontend ./frontend
-          docker tag nhom1-frontend qu1et/nhom1-frontend:latest
-          docker login -u ${{ secrets.Dockerhub_username }} -p ${{ secrets.Dockerhub_token }}
-          docker push qu1et/nhom1-frontend:latest
 
   deploy:
     name: Deploy Application
@@ -133,12 +102,10 @@ jobs:
         run: |
           docker pull postgres:15
           docker pull qu1et/nhom1-backend:latest
-          docker pull qu1et/nhom1-frontend:latest
 
       - name: Image scan
         run: |
           trivy image qu1et/nhom1-backend:latest > trivyimagedeploybackend.txt
-          trivy image qu1et/nhom1-frontend:latest > trivyimagedeployfrontend.txt
 
       - name: Deploy with Docker Compose
         run: docker-compose up -d

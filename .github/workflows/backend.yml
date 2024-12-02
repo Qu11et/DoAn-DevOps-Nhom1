@@ -6,7 +6,6 @@ on:
       - main
     paths:
       - backend/**
-
 jobs:
   build:
     runs-on: [self-hosted, backend-runner]
@@ -79,15 +78,6 @@ jobs:
           docker push qu1et/nhom1-backend:latest
           docker stop database
           docker rm database
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_USER: taikhau
-          POSTGRES_PASSWORD: 123
-          POSTGRES_DB: nhom1-database
-        ports:
-          - 5432:5432 # Ánh xạ cổng 5433 của host sang cổng 5432 của container PostgreSQL
   deploy:
     name: Deploy Application
     needs: build
@@ -100,6 +90,7 @@ jobs:
       # Pull Docker images
       - name: Pull Docker Images
         run: |
+          docker pull postges:15
           docker pull qu1et/nhom1-backend:latest
 
       - name: Image scan

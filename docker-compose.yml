@@ -29,8 +29,6 @@ services:
     container_name: frontend
     ports:
       - "9090:9090"
-    depends_on:
-      - backend
 
 volumes:
   db_data:

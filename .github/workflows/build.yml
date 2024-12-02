@@ -9,6 +9,16 @@ jobs:
   build:
     runs-on: [self-hosted]
 
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: taikhau
+          POSTGRES_PASSWORD: 123
+          POSTGRES_DB: nhom1-database
+        ports:
+          - 5432:5432 # Ánh xạ cổng 5433 của host sang cổng 5432 của container PostgreSQL
+
     steps:
       - uses: actions/checkout@v2
 
@@ -92,3 +102,19 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+          # Build and push backend image
+      - name: Build and Push Backend Image
+        run: |
+          docker build -t nhom1-backend ./backend
+          docker tag nhom1-backend qu1et/nhom1-backend:latest
+          docker login -u ${{ secrets.Dockerhub_username }} -p ${{ secrets.Dockerhub_token }}
+          docker push qu1et/nhom1-backend:latest
+      
+      # Build and push frontend image
+      - name: Build and Push Frontend Image
+        run: |
+          docker build -t nhom1-frontend ./frontend
+          docker tag nhom1-frontend qu1et/nhom1-frontend:latest
+          docker login -u ${{ secrets.Dockerhub_username }} -p ${{ secrets.Dockerhub_token }}
+          docker push qu1et/nhom1-frontend:latest

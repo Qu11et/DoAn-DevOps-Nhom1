@@ -118,3 +118,19 @@ jobs:
           docker tag nhom1-frontend qu1et/nhom1-frontend:latest
           docker login -u ${{ secrets.Dockerhub_username }} -p ${{ secrets.Dockerhub_token }}
           docker push qu1et/nhom1-frontend:latest
+
+  deploy:
+    name: Deploy Application
+    needs: build
+    runs-on: [self-hosted]
+    steps:
+      # Pull Docker images
+      - name: Pull Docker Images
+        run: |
+          docker pull postgres:15
+          docker pull qu1et/nhom1-backend:latest
+          docker pull qu1et/nhom1-frontend:latest
+
+      - name: Deploy with Docker Compose
+        run: docker-compose up -d
+        

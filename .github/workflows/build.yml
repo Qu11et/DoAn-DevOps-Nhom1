@@ -135,17 +135,16 @@ jobs:
           docker pull qu1et/nhom1-backend:latest
           docker pull qu1et/nhom1-frontend:latest
 
-      - name: Image backend scan
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          trivy image --token $GITHUB_TOKEN qu1et/nhom1-backend:latest > trivyimagedeploybackend.txt
+      - name: Start Trivy Server
+        run: docker run -d -p 4954:4954 aquasec/trivy:latest server
 
-      - name: Image frontend scan
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Scan Backend Image
         run: |
-          trivy image --token $GITHUB_TOKEN qu1et/nhom1-frontend:latest > trivyimagedeployfrontend.txt
+          trivy client --server http://localhost:4954 image qu1et/nhom1-backend:latest > trivy_backend_scan.txt
+
+      - name: Scan Frontend Image
+        run: |
+          trivy client --server http://localhost:4954 image qu1et/nhom1-frontend:latest > trivy_frontend_scan.txt
 
       - name: Deploy with Docker Compose
         run: docker-compose up -d

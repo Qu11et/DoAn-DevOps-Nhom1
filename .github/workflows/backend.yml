@@ -11,16 +11,6 @@ jobs:
   build:
     runs-on: [self-hosted, backend-runner]
 
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_USER: taikhau
-          POSTGRES_PASSWORD: 123
-          POSTGRES_DB: nhom1-database
-        ports:
-          - 5432:5432 # Ánh xạ cổng 5433 của host sang cổng 5432 của container PostgreSQL
-
     steps:
       - uses: actions/checkout@v2
 
@@ -99,7 +89,6 @@ jobs:
       # Pull Docker images
       - name: Pull Docker Images
         run: |
-          docker pull postgres:15
           docker pull qu1et/nhom1-backend:latest
       - name: Image scan
         run: |

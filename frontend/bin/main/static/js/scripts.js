@@ -3,12 +3,12 @@ function FetchUser() {
     const username = document.getElementById("username").value;
 
     // Fetch user data based on the username
-    fetch(`http://localhost:8080/api/user/getByName?name=${username}`)
+    fetch(`http://tit:8080/api/user/getByName?name=${username}`)
         .then(response => response.json()).catch(error => alert("No users matched that name!!"))
         .then(json => {
             console.log(json);
             // Update the HTML with the fetched data
-            document.getElementById("userUsername").innerText = json.username;
+            document.etElementById("userUsername").innerText = json.username;
             document.getElementById("userEmail").innerText = json.email;
             document.getElementById("userPassword").innerText = json.password;
 

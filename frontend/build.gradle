@@ -8,6 +8,10 @@ plugins {
 sonar {
   properties {
     property "sonar.projectKey", "doan-nhom1"
+	property "sonar.host.url", "http://3.83.166.171:9000"
+    property "sonar.login", System.getenv("SONAR_TOKEN") // Lấy token từ environment
+    property "sonar.sources", "src/main/java" // Chỉ định thư mục chứa mã nguồn
+    property "sonar.java.binaries", "$buildDir/classes/java/main" // Chỉ định thư mục chứa tệp .class
   }
 }
 

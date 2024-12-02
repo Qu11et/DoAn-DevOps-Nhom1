@@ -1,0 +1,22 @@
+name: CI/CD Pipeline for Web Application
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build and Push Docker Images
+    runs-on: [self-hosted]
+    steps:
+      # Checkout code
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      
+      # Run SonarQube analysis
+      - uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}

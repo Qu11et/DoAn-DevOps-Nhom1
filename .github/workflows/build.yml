@@ -32,7 +32,7 @@ jobs:
             sleep 5
           done
        
-      # Build backend
+      # Backend Build and Analysis
       - name: Set executable permission for gradlew
         run: chmod +x backend/gradlew
 
@@ -67,3 +67,28 @@ jobs:
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/nhom1-database
           SPRING_DATASOURCE_USERNAME: taikhau
           SPRING_DATASOURCE_PASSWORD: 123
+
+       # Frontend Build and Analysis
+      - name: Make gradlew executable for Frontend
+        run: chmod +x frontend/gradlew
+
+      # Build frontend
+      - name: Build Frontend
+        run: |
+          cd frontend
+          ./gradlew build
+
+      # Run tests for backend
+      - name: Run Frontend Tests
+        run: |
+          cd frontend
+          ./gradlew test
+
+      # Run SonarQube analysis
+      - name: SonarQube Analysis
+        run: |
+          cd frontend
+          ./gradlew sonar --info
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}

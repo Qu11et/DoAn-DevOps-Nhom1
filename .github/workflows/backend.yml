@@ -87,6 +87,8 @@ jobs:
           docker tag nhom1-backend qu1et/nhom1-backend:latest
           docker login -u ${{ secrets.Dockerhub_username }} -p ${{ secrets.Dockerhub_token }}
           docker push qu1et/nhom1-backend:latest
+          docker stop database
+          docker rm database
 
   deploy:
     name: Deploy Application
@@ -100,7 +102,6 @@ jobs:
       # Pull Docker images
       - name: Pull Docker Images
         run: |
-          docker pull postgres:15
           docker pull qu1et/nhom1-backend:latest
 
       - name: Image scan

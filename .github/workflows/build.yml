@@ -135,22 +135,17 @@ jobs:
           docker pull qu1et/nhom1-backend:latest
           docker pull qu1et/nhom1-frontend:latest
 
-      - name: Cache Trivy DB
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/trivy
-          key: ${{ runner.os }}-trivy-db
-          restore-keys: |
-            ${{ runner.os }}-trivy-db
-
-      - name: Download Trivy DB
-        run: trivy --download-db-only
-
       - name: Image backend scan
-        run: trivy image qu1et/nhom1-backend:latest > trivyimagedeploybackend.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          trivy image --token $GITHUB_TOKEN qu1et/nhom1-backend:latest > trivyimagedeploybackend.txt
 
       - name: Image frontend scan
-        run: trivy image qu1et/nhom1-frontend:latest > trivyimagedeployfrontend.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          trivy image --token $GITHUB_TOKEN qu1et/nhom1-frontend:latest > trivyimagedeployfrontend.txt
 
       - name: Deploy with Docker Compose
         run: docker-compose up -d

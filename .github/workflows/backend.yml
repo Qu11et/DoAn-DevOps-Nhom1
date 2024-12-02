@@ -108,5 +108,5 @@ jobs:
           trivy image qu1et/nhom1-backend:latest > trivyimagedeploybackend.txt
 
       - name: Deploy with Docker Compose
-        run: docker-compose up -d
+        run: docker-compose up -d database backend
         

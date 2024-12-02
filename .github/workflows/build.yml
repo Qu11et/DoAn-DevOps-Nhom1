@@ -31,6 +31,10 @@ jobs:
             echo "Waiting for existing database to be ready..."
             sleep 5
           done
+       
+      # Build backend
+      - name: Set executable permission for gradlew
+        run: chmod +x backend/gradlew
 
       # Build backend
       - name: Build Backend

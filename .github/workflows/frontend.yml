@@ -62,7 +62,7 @@ jobs:
   deploy:
     name: Deploy Application
     needs: build
-    runs-on: [self-hosted]
+    runs-on: [self-hosted, frontend-runner]
     steps:
       # Xóa các container/dịch vụ hiện có
       - name: Remove Existing Containers

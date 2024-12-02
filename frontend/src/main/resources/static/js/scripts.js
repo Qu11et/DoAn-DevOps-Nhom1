@@ -8,7 +8,7 @@ function FetchUser() {
         .then(json => {
             console.log(json);
             // Update the HTML with the fetched data
-            document.getAnimationsetElementById("userUsername").innerText = json.username;
+            document.getElementById("userUsername").innerText = json.username;
             document.getElementById("userEmail").innerText = json.email;
             document.getElementById("userPassword").innerText = json.password;
 

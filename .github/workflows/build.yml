@@ -17,7 +17,7 @@ jobs:
           POSTGRES_PASSWORD: testpassword
           POSTGRES_DB: testdb
         ports:
-          - 5432:5432
+          - 5433:5432
         options: >-
           --health-cmd="pg_isready -U testuser -d testdb"
           --health-interval=10s

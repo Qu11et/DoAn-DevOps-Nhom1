@@ -124,12 +124,22 @@ jobs:
     needs: build
     runs-on: [self-hosted]
     steps:
+      # Xóa các container/dịch vụ hiện có
+      - name: Remove Existing Containers
+        run: docker-compose down
+
       # Pull Docker images
       - name: Pull Docker Images
         run: |
           docker pull postgres:15
           docker pull qu1et/nhom1-backend:latest
           docker pull qu1et/nhom1-frontend:latest
+
+      - name: Image backend scan
+        run: trivy image qu1et/nhom1-backend:latest > trivyimagedeploybackend.txt
+
+      - name: Image frontend scan
+        run: trivy image qu1et/nhom1-frontend:latest > trivyimagedeployfrontend.txt
 
       - name: Deploy with Docker Compose
         run: docker-compose up -d

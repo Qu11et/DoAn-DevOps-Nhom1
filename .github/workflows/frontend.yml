@@ -34,7 +34,7 @@ jobs:
       - name: Build Frontend
         run: |
           cd frontend
-          ./gradlew build
+          ./gradlew clean build
 
       # Run tests for frontend
       - name: Run Frontend Tests
